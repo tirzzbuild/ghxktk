@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KILLUA</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:#0a0416;color:#fff;font-family:sans-serif;min-height:100vh;padding:20px}
+  .box{max-width:380px;margin:40px auto;padding:24px;border-radius:20px;background:linear-gradient(135deg,#2a0d4d,#12042a);border:1px solid #8b3dff55}
+  .logo{font-size:50px;text-align:center;margin-bottom:10px}
+  h1{text-align:center;font-size:20px;letter-spacing:2px;background:linear-gradient(90deg,#b366ff,#ff2fa0);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:20px}
+  label{display:block;font-size:11px;color:#8a7aa8;margin:10px 0 4px;letter-spacing:1px}
+  input,select{width:100%;padding:12px;background:#050505;border:1px solid #8b3dff88;color:#fff;border-radius:10px;font-size:13px;outline:none}
+  input:focus{border-color:#b366ff;box-shadow:0 0 12px #8b3dff66}
+  button{width:100%;padding:13px;margin-top:14px;background:linear-gradient(90deg,#8b3dff,#ff2fa0);border:none;color:#fff;border-radius:10px;font-size:14px;font-weight:800;letter-spacing:1.5px;cursor:pointer}
+  button:active{transform:scale(.97)}
+  .msg{margin-top:12px;padding:10px;border-radius:8px;font-size:12px;text-align:center;display:none}
+  .msg.err{display:block;background:#ff334422;border:1px solid #ff334488;color:#ff5566}
+  .msg.ok{display:block;background:#4dff8822;border:1px solid #4dff8888;color:#4dff88}
+  .link{display:block;text-align:center;margin-top:12px;font-size:11px;color:#4da6ff;text-decoration:none;font-weight:700;cursor:pointer}
+  .panel{display:none;max-width:420px;margin:0 auto}
+  .panel.on{display:block}
+  .card{padding:16px;border-radius:18px;background:#150828;border:1px solid #8b3dff44;margin-bottom:14px}
+  .card.gold{border-color:#ffc83c88;background:linear-gradient(135deg,#4a350d,#1a0f04)}
+  .row{display:flex;justify-content:space-between;font-size:12px;padding:8px 0;border-bottom:1px solid #8b3dff22}
+  .row:last-child{border-bottom:none}
+  .row .k{color:#8a7aa8}
+  .row .v{font-weight:700}
+  .stat{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+  .stat div{padding:10px;background:#0a0416;border-radius:10px;text-align:center}
+  .stat b{font-size:20px;color:#ffc83c}
+  .stat span{font-size:9px;color:#8a7aa8;letter-spacing:1px}
+  .footer{text-align:center;font-size:10px;color:#5a4a70;margin-top:20px}
+  .footer b{color:#b366ff}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div class="box" id="boxLogin">
+  <div class="logo">⚡</div>
+  <h1>KILLUA LOGIN</h1>
+  <label>USERNAME</label>
+  <input id="lu" placeholder="username">
+  <label>PASSWORD</label>
+  <input id="lp" type="password" placeholder="password">
+  <button onclick="login()">MASUK</button>
+  <div class="msg" id="lmsg"></div>
+  <a class="link" onclick="showReg()">Belum punya akun? Daftar</a>
+  <div class="footer">© <b>LEXZY DEV</b></div>
+</div>
+
+<!-- DAFTAR -->
+<div class="box" id="boxReg" style="display:none">
+  <div class="logo">📝</div>
+  <h1>DAFTAR AKUN</h1>
+  <label>USERNAME</label>
+  <input id="ru" placeholder="min 3 karakter">
+  <label>PASSWORD</label>
+  <input id="rp" type="password" placeholder="min 6 karakter">
+  <label>KONFIRMASI</label>
+  <input id="rp2" type="password" placeholder="ulangi">
+  <button onclick="register()">DAFTAR</button>
+  <div class="msg" id="rmsg"></div>
+  <a class="link" onclick="showLog()">Sudah punya akun? Login</a>
+</div>
+
+<!-- PANEL USER -->
+<div class="panel" id="panelUser">
+  <div class="box">
+    <div class="logo">⚡</div>
+    <h1 id="uName">USER</h1>
+    <div class="card">
+      <div class="row"><span class="k">STATUS</span><span class="v" style="color:#4dff88">AKTIF</span></div>
+      <div class="row"><span class="k">DEVELOPER</span><span class="v" style="color:#b366ff">LEXZY DEV</span></div>
+      <div class="row"><span class="k">PAKET</span><span class="v" style="color:#ff2fa0">VIP</span></div>
+    </div>
+    <div class="card">
+      <label>BUG TARGET</label>
+      <input id="bugT" placeholder="628xxxxxxxxxx">
+      <label>METODE</label>
+      <select id="bugM"><option>Freeze</option><option>Crash</option><option>Blank UI</option><option>Call Spam</option></select>
+      <button onclick="runBug()">EKSEKUSI</button>
+      <div class="msg" id="bugMsg"></div>
+    </div>
+    <button onclick="logout()" style="background:#ff334433;border:1px solid #ff334488;color:#ff5566">LOGOUT</button>
+  </div>
+</div>
+
+<!-- PANEL ADMIN -->
+<div class="panel" id="panelAdmin">
+  <div class="box">
+    <div class="logo">👑</div>
+    <h1>ADMIN PANEL</h1>
+    <div class="card gold">
+      <div class="row"><span class="k">ADMIN</span><span class="v" style="color:#ffc83c">ONLINE</span></div>
+      <div class="stat">
+        <div><b id="aTotal">0</b><span>TOTAL USER</span></div>
+        <div><b>100%</b><span>UPTIME</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <label>DAFTAR USER</label>
+      <div id="userList"></div>
+    </div>
+    <button onclick="logout()" style="background:#ff334433;border:1px solid #ff334488;color:#ff5566">LOGOUT</button>
+  </div>
+</div>
+
+<script>
+const BUILTIN=[{username:"Lexzy Dev",password:"lexzy123",role:"admin"},{username:"Killua",password:"killua123",role:"user"}];
+const K_USERS='killua_users',K_SESS='killua_session';
+const getUsers=()=>{try{return JSON.parse(localStorage.getItem(K_USERS)||'[]')}catch(e){return[]}};
+const saveUsers=u=>localStorage.setItem(K_USERS,JSON.stringify(u));
+const allUsers=()=>[...BUILTIN,...getUsers().map(u=>({username:u.username,password:u.password,role:u.role||'user'}))];
+
+function showLogin(){document.getElementById('boxLogin').style.display='block';document.getElementById('boxReg').style.display='none';document.getElementById('panelUser').classList.remove('on');document.getElementById('panelAdmin').classList.remove('on');}
+function showReg(){document.getElementById('boxLogin').style.display='none';document.getElementById('boxReg').style.display='block';}
+function showUser(){document.getElementById('boxLogin').style.display='none';document.getElementById('boxReg').style.display='none';document.getElementById('panelUser').classList.add('on');document.getElementById('panelAdmin').classList.remove('on');}
+function showAdmin(){document.getElementById('boxLogin').style.display='none';document.getElementById('boxReg').style.display='none';document.getElementById('panelAdmin').classList.add('on');document.getElementById('panelUser').classList.remove('on');renderAdmin();}
+
+function login(){
+  const u=document.getElementById('lu').value.trim(),p=document.getElementById('lp').value,m=document.getElementById('lmsg');
+  if(!u||!p){m.className='msg err';m.textContent='Isi semua kolom!';return;}
+  const f=allUsers().find(x=>x.username===u&&x.password===p);
+  if(f){
+    m.className='msg ok';m.textContent='Login berhasil!';
+    localStorage.setItem(K_SESS,JSON.stringify({username:f.username,role:f.role}));
+    setTimeout(()=>{f.role==='admin'?showAdmin():showUserPanel(f.username);},400);
+  }else{m.className='msg err';m.textContent='Username/password salah!';}
+}
+
+function register(){
+  const u=document.getElementById('ru').value.trim(),p=document.getElementById('rp').value,p2=document.getElementById('rp2').value,m=document.getElementById('rmsg');
+  if(!u||!p||!p2){m.className='msg err';m.textContent='Isi semua!';return;}
+  if(u.length<3){m.className='msg err';m.textContent='Username min 3!';return;}
+  if(p.length<6){m.className='msg err';m.textContent='Password min 6!';return;}
+  if(p!==p2){m.className='msg err';m.textContent='Password tidak sama!';return;}
+  if(allUsers().find(x=>x.username.toLowerCase()===u.toLowerCase())){m.className='msg err';m.textContent='Username sudah dipakai!';return;}
+  const r=getUsers();r.push({username:u,password:p,role:'user'});saveUsers(r);
+  m.className='msg ok';m.textContent='Berhasil! Silakan login.';
+  setTimeout(()=>{document.getElementById('lu').value=u;document.getElementById('lp').value='';showLogin();},1200);
+}
+
+function showUserPanel(name){
+  showUser();
+  document.getElementById('uName').textContent=name.toUpperCase();
+}
+
+function runBug(){
+  const t=document.getElementById('bugT').value.trim(),m=document.getElementById('bugMsg');
+  if(!t){m.className='msg err';m.textContent='Isi target!';return;}
+  m.className='msg ok';m.textContent='Terkirim ke '+t;
+}
+
+function renderAdmin(){
+  const r=getUsers(),total=r.length+1;
+  document.getElementById('aTotal').textContent=total;
+  const list=document.getElementById('userList');
+  list.innerHTML='<div class="row"><span class="k">👑 LEXZY DEV</span><span class="v" style="color:#4dff88">ADMIN</span></div>';
+  r.forEach(u=>{list.innerHTML+='<div class="row"><span class="k">👤 '+u.username.toUpperCase()+'</span><span class="v" style="color:#4dff88">USER</span></div>';});
+}
+
+function logout(){localStorage.removeItem(K_SESS);showLogin();}
+
+document.getElementById('lp').addEventListener('keydown',e=>{if(e.key==='Enter')login()});
+document.getElementById('rp2').addEventListener('keydown',e=>{if(e.key==='Enter')register()});
+
+(function(){
+  const s=JSON.parse(localStorage.getItem(K_SESS)||'null');
+  if(s){s.role==='admin'?showAdmin():showUserPanel(s.username);}else{showLogin();}
+})();
+</script>
+</body>
+</html>
